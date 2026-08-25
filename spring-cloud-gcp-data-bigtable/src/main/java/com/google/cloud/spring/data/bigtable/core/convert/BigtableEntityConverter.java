@@ -16,6 +16,7 @@
 
 package com.google.cloud.spring.data.bigtable.core.convert;
 
+import com.google.cloud.bigtable.data.v2.models.MutationApi;
 import com.google.cloud.bigtable.data.v2.models.Row;
 import com.google.cloud.bigtable.data.v2.models.RowMutation;
 import com.google.protobuf.ByteString;
@@ -33,6 +34,21 @@ public interface BigtableEntityConverter {
    * @param mutation the Bigtable RowMutation sink to populate
    */
   void write(Object entity, RowMutation mutation);
+
+  /**
+   * Serializes the persistent properties of the given entity into the provided {@link MutationApi} sink.
+   *
+   * @param entity the domain entity to serialize
+   * @param mutation the Bigtable mutation sink to populate
+   */
+  default void write(Object entity, MutationApi<?> mutation) {
+    if (mutation instanceof RowMutation rm) {
+      write(entity, rm);
+    } else {
+      throw new UnsupportedOperationException(
+          "Mutation sink type not supported: " + mutation.getClass().getName());
+    }
+  }
 
   /**
    * Deserializes a Bigtable {@link Row} into an instance of the specified domain entity class.

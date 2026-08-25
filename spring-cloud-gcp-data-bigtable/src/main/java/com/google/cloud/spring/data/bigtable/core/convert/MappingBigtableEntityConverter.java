@@ -16,6 +16,7 @@
 
 package com.google.cloud.spring.data.bigtable.core.convert;
 
+import com.google.cloud.bigtable.data.v2.models.MutationApi;
 import com.google.cloud.bigtable.data.v2.models.Row;
 import com.google.cloud.bigtable.data.v2.models.RowCell;
 import com.google.cloud.bigtable.data.v2.models.RowMutation;
@@ -87,8 +88,13 @@ public class MappingBigtableEntityConverter implements BigtableEntityConverter {
 
   @Override
   public void write(Object entity, RowMutation mutation) {
+    write(entity, (MutationApi<?>) mutation);
+  }
+
+  @Override
+  public void write(Object entity, MutationApi<?> mutation) {
     Assert.notNull(entity, "Entity to write must not be null");
-    Assert.notNull(mutation, "RowMutation target must not be null");
+    Assert.notNull(mutation, "Mutation target must not be null");
 
     BigtablePersistentEntity<?> persistentEntity =
         this.mappingContext.getPersistentEntityOrFail(entity.getClass());
