@@ -28,6 +28,7 @@ import org.springframework.data.config.ParsingUtils;
 import org.springframework.data.repository.config.AnnotationRepositoryConfigurationSource;
 import org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport;
 import org.springframework.data.repository.config.XmlRepositoryConfigurationSource;
+import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
 /**
@@ -49,11 +50,21 @@ public class BigtableRepositoryConfigurationExtension
   @Override
   public void postProcess(
       BeanDefinitionBuilder builder, AnnotationRepositoryConfigurationSource config) {
-    AnnotationAttributes attributes = config.getAttributes();
+    AnnotationAttributes attributes = config != null ? config.getAttributes() : null;
 
-    builder.addPropertyReference("bigtableOperations", attributes.getString("bigtableTemplateRef"));
-    builder.addPropertyReference(
-        "bigtableMappingContext", attributes.getString("bigtableMappingContextRef"));
+    String templateRef =
+        (attributes != null && attributes.containsKey("bigtableTemplateRef")
+                && StringUtils.hasText(attributes.getString("bigtableTemplateRef")))
+            ? attributes.getString("bigtableTemplateRef")
+            : "bigtableTemplate";
+    String mappingContextRef =
+        (attributes != null && attributes.containsKey("bigtableMappingContextRef")
+                && StringUtils.hasText(attributes.getString("bigtableMappingContextRef")))
+            ? attributes.getString("bigtableMappingContextRef")
+            : "bigtableMappingContext";
+
+    builder.addPropertyReference("bigtableOperations", templateRef);
+    builder.addPropertyReference("bigtableMappingContext", mappingContextRef);
   }
 
   @Override
