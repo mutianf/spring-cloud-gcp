@@ -87,6 +87,12 @@
 			</dependency>
 
 			<dependency>
+				<groupId>com.google.cloud</groupId>
+				<artifactId>spring-cloud-gcp-data-bigtable</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
 				<version>${spring-boot-dependencies.version}</version>
@@ -390,6 +396,7 @@
 		<modules>
 			<module>spring-cloud-gcp-storage</module>
 			<module>spring-cloud-gcp-vision</module>
+			<module>spring-cloud-gcp-data-bigtable</module>
 			<module>spring-cloud-gcp-data-spanner</module>
 			<module>spring-cloud-gcp-parametermanager</module>
 			<module>spring-cloud-gcp-secretmanager</module>
@@ -490,6 +497,7 @@
 				<module>spring-cloud-gcp-bigquery</module>
 				<module>spring-cloud-gcp-cloudfoundry</module>
 				<module>spring-cloud-gcp-core</module>
+				<module>spring-cloud-gcp-data-bigtable</module>
 				<module>spring-cloud-gcp-data-datastore</module>
 				<module>spring-cloud-gcp-data-firestore</module>
 				<module>spring-cloud-gcp-data-spanner</module>
@@ -524,6 +532,7 @@
 				<module>spring-cloud-gcp-bigquery</module>
 				<module>spring-cloud-gcp-cloudfoundry</module>
 				<module>spring-cloud-gcp-core</module>
+				<module>spring-cloud-gcp-data-bigtable</module>
 				<module>spring-cloud-gcp-data-datastore</module>
 				<module>spring-cloud-gcp-data-firestore</module>
 				<module>spring-cloud-gcp-data-spanner</module>
@@ -749,6 +758,7 @@
 				<module>spring-cloud-gcp-bigquery</module>
 				<module>spring-cloud-gcp-cloudfoundry</module>
 				<module>spring-cloud-gcp-core</module>
+				<module>spring-cloud-gcp-data-bigtable</module>
 				<module>spring-cloud-gcp-data-datastore</module>
 				<module>spring-cloud-gcp-data-firestore</module>
 				<module>spring-cloud-gcp-data-spanner</module>
