@@ -210,6 +210,18 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- Bigtable -->
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>spring-cloud-gcp-data-bigtable</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-bigtable</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!-- Spanner -->
         <dependency>
             <groupId>com.google.cloud</groupId>
