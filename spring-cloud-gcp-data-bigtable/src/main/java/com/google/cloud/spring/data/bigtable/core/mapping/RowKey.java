@@ -21,7 +21,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.springframework.core.annotation.AliasFor;
 import org.springframework.data.annotation.Id;
 
 /**
@@ -35,19 +34,11 @@ import org.springframework.data.annotation.Id;
 public @interface RowKey {
 
   /**
-   * The 0-based ordering of this property within a composite row key.
-   * Defaults to 0 for single row keys or the first component.
+   * The 0-based ordering of this property within a composite row key. Components are
+   * concatenated in ascending order of this value. Defaults to 0, which is correct for a
+   * single-field row key or the first component of a composite key.
    *
    * @return the row key order
    */
-  @AliasFor("value")
   int order() default 0;
-
-  /**
-   * Alias for {@link #order()}.
-   *
-   * @return the row key order
-   */
-  @AliasFor("order")
-  int value() default 0;
 }
