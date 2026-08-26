@@ -1,4 +1,6 @@
 com.google.cloud.spring.autoconfigure.bigquery.GcpBigQueryAutoConfiguration
+com.google.cloud.spring.autoconfigure.bigtable.BigtableRepositoriesAutoConfiguration
+com.google.cloud.spring.autoconfigure.bigtable.GcpBigtableAutoConfiguration
 com.google.cloud.spring.autoconfigure.core.GcpContextAutoConfiguration
 com.google.cloud.spring.autoconfigure.datastore.DatastoreRepositoriesAutoConfiguration
 com.google.cloud.spring.autoconfigure.datastore.GcpDatastoreAutoConfiguration
