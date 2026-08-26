@@ -57,47 +57,44 @@ public class BasicBigtablePersistentProperty
   }
 
   private void validateProperty() {
-    boolean isRowKey = isRowKey();
-    boolean isColumn = isColumn();
-    boolean isDynamic = isDynamicColumns();
+    if (isRowKey()) {
+      if (isColumn() || isDynamicColumns()) {
+        throw new MappingException(
+            describe() + " cannot combine @RowKey (or @Id) with @Column or @DynamicColumns.");
+      }
+      return;
+    }
 
-    if (isRowKey && isColumn) {
-      throw new MappingException(
-          "Property '" + getName() + "' in " + getOwner().getType().getSimpleName()
-              + " cannot be annotated with both @RowKey and @Column.");
-    }
-    if (isRowKey && isDynamic) {
-      throw new MappingException(
-          "Property '" + getName() + "' in " + getOwner().getType().getSimpleName()
-              + " cannot be annotated with both @RowKey and @DynamicColumns.");
-    }
-    if (isColumn && isDynamic) {
-      throw new MappingException(
-          "Property '" + getName() + "' in " + getOwner().getType().getSimpleName()
-              + " cannot be annotated with both @Column and @DynamicColumns.");
-    }
-    if (isColumn) {
+    if (isColumn()) {
+      if (isDynamicColumns()) {
+        throw new MappingException(
+            describe() + " cannot be annotated with both @Column and @DynamicColumns.");
+      }
       Column col = findAnnotation(Column.class);
       if (col != null && !StringUtils.hasText(col.family())) {
-        throw new MappingException(
-            "Column family for property '" + getName() + "' in "
-                + getOwner().getType().getSimpleName() + " cannot be empty.");
+        throw new MappingException("Column family for " + describe() + " cannot be empty.");
       }
+      if (col != null && !StringUtils.hasText(col.qualifier())) {
+        throw new MappingException("Column qualifier for " + describe() + " cannot be empty.");
+      }
+      return;
     }
-    if (isDynamic) {
+
+    if (isDynamicColumns()) {
       DynamicColumns dynamic = findAnnotation(DynamicColumns.class);
       if (dynamic != null && !StringUtils.hasText(dynamic.family())) {
-        throw new MappingException(
-            "DynamicColumns family for property '" + getName() + "' in "
-                + getOwner().getType().getSimpleName() + " cannot be empty.");
+        throw new MappingException("DynamicColumns family for " + describe() + " cannot be empty.");
       }
       if (!Map.class.isAssignableFrom(getType())) {
         throw new MappingException(
-            "Property '" + getName() + "' annotated with @DynamicColumns in "
-                + getOwner().getType().getSimpleName() + " must be of Map type, but found "
+            describe() + " annotated with @DynamicColumns must be of Map type, but found "
                 + getType().getName());
       }
     }
+  }
+
+  private String describe() {
+    return "Property '" + getName() + "' in " + getOwner().getType().getSimpleName();
   }
 
   @Override
@@ -108,10 +105,7 @@ public class BasicBigtablePersistentProperty
   @Override
   public int getRowKeyOrder() {
     RowKey rowKey = findAnnotation(RowKey.class);
-    if (rowKey != null) {
-      return rowKey.order() != 0 ? rowKey.order() : rowKey.value();
-    }
-    return 0;
+    return rowKey != null ? rowKey.order() : 0;
   }
 
   @Override

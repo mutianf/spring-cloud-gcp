@@ -52,8 +52,7 @@ public interface BigtablePersistentProperty extends PersistentProperty<BigtableP
   String getFamilyName();
 
   /**
-   * Returns the column qualifier name. Uses {@link Column#qualifier()} if provided,
-   * otherwise defaults to the field naming strategy result (or property name).
+   * Returns the column qualifier name from {@link Column#qualifier()}, which is required.
    *
    * @return the column qualifier
    */

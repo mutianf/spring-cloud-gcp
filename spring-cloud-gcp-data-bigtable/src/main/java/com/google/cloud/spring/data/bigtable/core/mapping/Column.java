@@ -38,10 +38,9 @@ public @interface Column {
   String family();
 
   /**
-   * The column qualifier (column name within the family).
-   * If not specified (empty), the property name is used.
+   * The column qualifier (column name within the family). Required; must be non-blank.
    *
    * @return the column qualifier
    */
-  String qualifier() default "";
+  String qualifier();
 }

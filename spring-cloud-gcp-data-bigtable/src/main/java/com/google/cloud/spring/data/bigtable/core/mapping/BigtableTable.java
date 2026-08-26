@@ -22,7 +22,6 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.springframework.core.annotation.AliasFor;
 
 /**
  * Annotation for domain entity classes to specify the Cloud Bigtable table name and row key delimiter.
@@ -34,20 +33,11 @@ import org.springframework.core.annotation.AliasFor;
 public @interface BigtableTable {
 
   /**
-   * The name of the Cloud Bigtable table.
+   * The name of the Cloud Bigtable table. Required; must be non-blank.
    *
    * @return the table name
    */
-  @AliasFor("name")
-  String value() default "";
-
-  /**
-   * The name of the Cloud Bigtable table.
-   *
-   * @return the table name
-   */
-  @AliasFor("value")
-  String name() default "";
+  String name();
 
   /**
    * The delimiter used to join composite row key components. Defaults to "#".
