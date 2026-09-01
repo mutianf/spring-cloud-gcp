@@ -23,10 +23,21 @@ import org.springframework.dao.DataAccessException;
  */
 public class BigtableDataException extends DataAccessException {
 
+  /**
+   * Creates a new exception.
+   *
+   * @param message the detail message
+   */
   public BigtableDataException(String message) {
     super(message);
   }
 
+  /**
+   * Creates a new exception.
+   *
+   * @param message the detail message
+   * @param cause the underlying cause
+   */
   public BigtableDataException(String message, Throwable cause) {
     super(message, cause);
   }

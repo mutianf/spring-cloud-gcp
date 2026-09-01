@@ -26,6 +26,15 @@ import org.springframework.data.mapping.model.SimpleTypeHolder;
  */
 public class BigtablePersistentPropertyImpl extends BasicBigtablePersistentProperty {
 
+  /**
+   * Creates a new persistent property.
+   *
+   * @param property the property to create the persistent property for
+   * @param owner the entity declaring the property
+   * @param simpleTypeHolder the type holder deciding which types are simple
+   * @param fieldNamingStrategy the strategy used to derive a column qualifier from the property
+   *     name
+   */
   public BigtablePersistentPropertyImpl(
       Property property,
       PersistentEntity<?, BigtablePersistentProperty> owner,
@@ -34,6 +43,13 @@ public class BigtablePersistentPropertyImpl extends BasicBigtablePersistentPrope
     super(property, owner, simpleTypeHolder, fieldNamingStrategy);
   }
 
+  /**
+   * Creates a new persistent property using the default field naming strategy.
+   *
+   * @param property the property to create the persistent property for
+   * @param owner the entity declaring the property
+   * @param simpleTypeHolder the type holder deciding which types are simple
+   */
   public BigtablePersistentPropertyImpl(
       Property property,
       PersistentEntity<?, BigtablePersistentProperty> owner,

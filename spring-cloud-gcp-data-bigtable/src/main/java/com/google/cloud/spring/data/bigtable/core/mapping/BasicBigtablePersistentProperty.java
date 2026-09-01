@@ -36,6 +36,16 @@ public class BasicBigtablePersistentProperty
 
   private final FieldNamingStrategy fieldNamingStrategy;
 
+  /**
+   * Creates a new persistent property, validating its Bigtable mapping annotations.
+   *
+   * @param property the property to create the persistent property for
+   * @param owner the entity declaring the property
+   * @param simpleTypeHolder the type holder deciding which types are simple
+   * @param fieldNamingStrategy the strategy used to derive a column qualifier from the property
+   *     name, or null to use {@link PropertyNameFieldNamingStrategy#INSTANCE}
+   * @throws MappingException if the property's mapping annotations are inconsistent
+   */
   public BasicBigtablePersistentProperty(
       Property property,
       PersistentEntity<?, BigtablePersistentProperty> owner,
@@ -49,6 +59,14 @@ public class BasicBigtablePersistentProperty
     validateProperty();
   }
 
+  /**
+   * Creates a new persistent property using {@link PropertyNameFieldNamingStrategy#INSTANCE}.
+   *
+   * @param property the property to create the persistent property for
+   * @param owner the entity declaring the property
+   * @param simpleTypeHolder the type holder deciding which types are simple
+   * @throws MappingException if the property's mapping annotations are inconsistent
+   */
   public BasicBigtablePersistentProperty(
       Property property,
       PersistentEntity<?, BigtablePersistentProperty> owner,
@@ -58,38 +76,44 @@ public class BasicBigtablePersistentProperty
 
   private void validateProperty() {
     if (isRowKey()) {
-      if (isColumn() || isDynamicColumns()) {
-        throw new MappingException(
-            describe() + " cannot combine @RowKey (or @Id) with @Column or @DynamicColumns.");
-      }
+      checkMapping(
+          !isColumn() && !isDynamicColumns(),
+          "%s cannot combine @RowKey (or @Id) with @Column or @DynamicColumns.",
+          describe());
       return;
     }
 
     if (isColumn()) {
-      if (isDynamicColumns()) {
-        throw new MappingException(
-            describe() + " cannot be annotated with both @Column and @DynamicColumns.");
-      }
-      Column col = findAnnotation(Column.class);
-      if (col != null && !StringUtils.hasText(col.family())) {
-        throw new MappingException("Column family for " + describe() + " cannot be empty.");
-      }
-      if (col != null && !StringUtils.hasText(col.qualifier())) {
-        throw new MappingException("Column qualifier for " + describe() + " cannot be empty.");
-      }
+      checkMapping(
+          !isDynamicColumns(),
+          "%s cannot be annotated with both @Column and @DynamicColumns.",
+          describe());
+      Column column = findAnnotation(Column.class);
+      checkMapping(
+          StringUtils.hasText(column.family()), "Column family for %s cannot be empty.", describe());
+      checkMapping(
+          StringUtils.hasText(column.qualifier()),
+          "Column qualifier for %s cannot be empty.",
+          describe());
       return;
     }
 
     if (isDynamicColumns()) {
-      DynamicColumns dynamic = findAnnotation(DynamicColumns.class);
-      if (dynamic != null && !StringUtils.hasText(dynamic.family())) {
-        throw new MappingException("DynamicColumns family for " + describe() + " cannot be empty.");
-      }
-      if (!Map.class.isAssignableFrom(getType())) {
-        throw new MappingException(
-            describe() + " annotated with @DynamicColumns must be of Map type, but found "
-                + getType().getName());
-      }
+      checkMapping(
+          StringUtils.hasText(findAnnotation(DynamicColumns.class).family()),
+          "DynamicColumns family for %s cannot be empty.",
+          describe());
+      checkMapping(
+          Map.class.isAssignableFrom(getType()),
+          "%s annotated with @DynamicColumns must be of Map type, but found %s.",
+          describe(),
+          getType().getName());
+    }
+  }
+
+  private static void checkMapping(boolean expression, String message, Object... args) {
+    if (!expression) {
+      throw new MappingException(String.format(message, args));
     }
   }
 
@@ -97,11 +121,25 @@ public class BasicBigtablePersistentProperty
     return "Property '" + getName() + "' in " + getOwner().getType().getSimpleName();
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * <p>A property is a row key component if it carries {@link RowKey} or any other
+   * {@link org.springframework.data.annotation.Id} meta-annotated annotation. An entity may
+   * declare several such properties; they form a composite key ordered by {@link
+   * #getRowKeyOrder()}.
+   */
   @Override
   public boolean isRowKey() {
     return isIdProperty() || isAnnotationPresent(RowKey.class);
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * <p>Returns 0 for a property annotated with plain {@code @Id} rather than {@link RowKey},
+   * which is the correct order for a single-component key.
+   */
   @Override
   public int getRowKeyOrder() {
     RowKey rowKey = findAnnotation(RowKey.class);
@@ -113,6 +151,11 @@ public class BasicBigtablePersistentProperty
     return isAnnotationPresent(Column.class);
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * <p>Reads {@link Column#family()} or {@link DynamicColumns#family()}, whichever is present.
+   */
   @Override
   public String getFamilyName() {
     Column col = findAnnotation(Column.class);
@@ -126,6 +169,12 @@ public class BasicBigtablePersistentProperty
     return null;
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * <p>{@link Column#qualifier()} is mandatory and validated to be non-blank, so the configured
+   * {@link FieldNamingStrategy} only applies to properties that carry no {@link Column}.
+   */
   @Override
   public String getColumnQualifier() {
     Column col = findAnnotation(Column.class);
@@ -145,6 +194,12 @@ public class BasicBigtablePersistentProperty
     return isRowKey() || isColumn() || isDynamicColumns();
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * <p>Bigtable entities have no associations, so this returns a self-referencing
+   * {@link Association} to satisfy the Spring Data contract.
+   */
   @Override
   protected Association<BigtablePersistentProperty> createAssociation() {
     return new Association<>(this, null);
