@@ -33,6 +33,7 @@
 		<module>spring-cloud-gcp-starter-config</module>
 		<module>spring-cloud-gcp-starter-parameter</module>
 		<module>spring-cloud-gcp-starter-storage</module>
+		<module>spring-cloud-gcp-starter-data-bigtable</module>
 		<module>spring-cloud-gcp-starter-data-spanner</module>
 		<module>spring-cloud-gcp-starter-data-datastore</module>
 		<module>spring-cloud-gcp-starter-firestore</module>

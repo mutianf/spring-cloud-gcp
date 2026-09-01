@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.google.cloud</groupId>
+		<artifactId>spring-cloud-gcp-starters</artifactId>
+		<version>8.1.1-SNAPSHOT</version><!-- {x-version-update:spring-cloud-gcp:current} -->
+	</parent>
+	<artifactId>spring-cloud-gcp-starter-data-bigtable</artifactId>
+	<name>Spring Framework on Google Cloud Starter - Bigtable</name>
+	<description>Starter for Google Cloud Bigtable</description>
+	<url>https://github.com/GoogleCloudPlatform/spring-cloud-gcp/tree/main/spring-cloud-gcp-starters/spring-cloud-gcp-starter-data-bigtable</url>
+
+	<properties>
+		<main.basedir>${basedir}/../..</main.basedir>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>spring-cloud-gcp-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>spring-cloud-gcp-data-bigtable</artifactId>
+		</dependency>
+	</dependencies>
+</project>

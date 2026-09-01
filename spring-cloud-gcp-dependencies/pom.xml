@@ -83,6 +83,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.google.cloud</groupId>
+				<artifactId>spring-cloud-gcp-data-bigtable</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.cloud</groupId>
 				<artifactId>spring-cloud-gcp-data-spanner</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -161,6 +166,11 @@
 			<dependency>
 				<groupId>com.google.cloud</groupId>
 				<artifactId>spring-cloud-gcp-starter-storage</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.cloud</groupId>
+				<artifactId>spring-cloud-gcp-starter-data-bigtable</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
